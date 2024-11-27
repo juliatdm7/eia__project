@@ -17,6 +17,7 @@ A.ti.raw.data <- read_excel("data/Arran_data1.xlsx", sheet = "North side invert 
 B.ti.raw.data <- read_excel("data/Arran_data1.xlsx", sheet = "South side invert transects")
 ti.raw.data <- rbind(A.ti.raw.data,B.ti.raw.data)
 bog.raw.data <- read_excel("data/Arran_data1.xlsx", sheet = "BOG")
+bog.raw.data <- bog.raw.data[1:22,]
 vert1.raw.dat <- read_excel("data/Arran_data1.xlsx", sheet = "Vertebrates")
 vert2.raw.dat <- read_excel("data/Arran_data1.xlsx", sheet = "Vertebrates (tech)")
 moth.raw.data <- read_excel("data/Arran_data1.xlsx", sheet = "N+S Moth traps")
@@ -49,3 +50,15 @@ vert2.raw.dat$eventTime <- as.character(vert2.raw.dat$eventTime)
 
 raw.data.all <- rbind(fi.raw.data,ti.raw.data,bog.raw.data,moth.raw.data,vert1.raw.dat,vert2.raw.dat)
 
+for (i in 1:nrow(raw.data.all)) {
+  if (raw.data.all[i, "site"] == "North") {
+    raw.data.all[i, "site"] <- "A"
+  } else if (raw.data.all[i, "site"] == "South") {
+    raw.data.all[i, "site"] <- "B"
+  }
+}
+
+class_counts <- raw.data.all[,c("class","site","occurrenceStatus")]
+dat.B.redagg <- dat.B.red %>%
+  group_by(order, new_locationID) %>%
+  summarise(total_individuals = sum(individualCount), .groups = "drop")
