@@ -44,3 +44,21 @@ names(list0) <- names(fi.dat.ab) # we assign the species names to this list of 0
 fi.dat.ab <- as.data.frame(fi.dat.ab %>% replace_na(list0)) # here we replace all NAs with 0s for all species in dat.soc.pa
 row.names(fi.dat.ab) <- fi.dat.ab$site # here we give to each row the name of its corresponding island
 fi.dat.ab <- fi.dat.ab[,-1] # we remove the island column because we don't need it anymore, as we have given island names to all rows
+
+# Computing Shannon's and Simpson's diversity indices:
+shannon.alpha.fi.dat <- diversity(fi.dat.ab, index = "shannon")
+simpson.alpha.fi.dat <- diversity(fi.dat.ab, index = "simpson")
+
+# To compute order richness is better to work with presence/absence data.
+# We transform our site-by-order matrix (data frame) into presence/absence:
+fi.dat.pa <- ifelse(fi.dat.ab > 0, 1, 0)
+richness_A <- rowSums(fi.dat.pa)[1] # Order richness in site A is 13
+richness_B <- rowSums(fi.dat.pa)[2] # Order richness in site B is 9
+
+# Building a data frame including all three metrics:
+metrics <- data.frame(
+  Site = rep(c("A", "B"), 3),
+  Metric = rep(c("Shannon", "Simpson", "Richness"), each = 2),
+  Value = c(shannon.alpha.fi.dat[1], shannon.alpha.fi.dat[2], simpson.alpha.fi.dat[1], simpson.alpha.fi.dat[2], richness_A, richness_B)
+)
+
