@@ -122,6 +122,7 @@ orders_plot <- ggplot(dat.it.redagg, aes(x = order, y = total_individuals, fill 
   geom_bar(stat = "identity", position = "dodge", colour = "black") +
   labs(title = "Abundance of orders per site", x = "Orders", y = "Nr of specimens collected") +
   scale_fill_manual(values = c("A" = "#0073e6", "B" = "#f194b8")) +
+  theme_bw() +
   theme(
     plot.title = element_text(hjust = 0.5, margin = margin(t = 5, b = 40), size = 16), 
     axis.title = element_text(size = 14), 
@@ -149,6 +150,7 @@ shannon_plot <- ggplot(shannon, aes(x = Site, y = Value, fill = Site)) +
   labs(title = "Shannon Index Comparison", x = "Site", y = "Diversity Index") +
   facet_wrap(~Height) +
   scale_fill_manual(values = c("A" = "#0073e6", "B" = "#f194b8")) +
+  theme_bw() +
   theme(
     plot.title = element_text(hjust = 0.5, margin = margin(t = 5, b = 40), size = 16), 
     axis.title = element_text(size = 14), 
@@ -165,6 +167,7 @@ simpson_plot <- ggplot(simpson, aes(x = Site, y = Value, fill = Site)) +
   labs(title = "Simpson Index Comparison", x = "Site", y = "Diversity Index") +
   facet_wrap(~Height) +
   scale_fill_manual(values = c("A" = "#0073e6", "B" = "#f194b8")) +
+  theme_bw() +
   theme(
     plot.title = element_text(hjust = 0.5, margin = margin(t = 5, b = 40), size = 16), 
     axis.title = element_text(size = 14), 
@@ -260,12 +263,13 @@ shannon_plot <- ggplot(shannon, aes(x = Site, y = Value, fill = Site)) +
   labs(title = "Shannon Index Comparison", x = "Site", y = "Diversity Index") +
   facet_wrap(~Height) +
   scale_fill_manual(values = c("A" = "#0073e6", "B" = "#f194b8")) +
+  theme_bw() +
   theme(
     plot.title = element_text(hjust = 0.5, margin = margin(t = 5, b = 40), size = 16), 
     axis.title = element_text(size = 14), 
     axis.text = element_text(size = 12),
     strip.text = element_text(size = 12))
-ggsave("figures/Shannon_indices_WITH_BOG.png")
+ggsave("figures/terrestrial_invertebrates/Shannon_indices_WITH_BOG.png")
 cvd_grid(shannon_plot) # checking that the chosen colour palette is suitable for colourblindness
 
 # preparing a data frame for Simpson index
@@ -276,6 +280,7 @@ simpson_plot <- ggplot(simpson, aes(x = Site, y = Value, fill = Site)) +
   labs(title = "Simpson Index Comparison", x = "Site", y = "Diversity Index") +
   facet_wrap(~Height) +
   scale_fill_manual(values = c("A" = "#0073e6", "B" = "#f194b8")) +
+  theme_bw() +
   theme(
     plot.title = element_text(hjust = 0.5, margin = margin(t = 5, b = 40), size = 16), 
     axis.title = element_text(size = 14), 
@@ -284,7 +289,25 @@ simpson_plot <- ggplot(simpson, aes(x = Site, y = Value, fill = Site)) +
 ggsave("figures/terrestrial_invertebrates/Simpson_indices_WITH_BOG.png")
 cvd_grid(simpson_plot) # checking that the chosen colour palette is suitable for colourblindness (although we're using the same colours and we've seen it's colourblindness safe)
 
+# Orders accross habitats and sites
 
+dat.A.redagg$site <- "A"
+dat.B.redagg$site <- "B"
+dat.redagg <- rbind(dat.A.redagg,dat.B.redagg)
+
+orders_plot <- ggplot(dat.redagg, aes(x = order, y = total_individuals, fill = site)) +
+  geom_bar(stat = "identity", position = "dodge", colour = "black") +
+  labs(title = "Abundance of orders per site", x = "Orders", y = "Nr of specimens collected") +
+  facet_wrap(~new_locationID) +
+  scale_fill_manual(values = c("A" = "#0073e6", "B" = "#f194b8")) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(hjust = 0.5, margin = margin(t = 5, b = 40), size = 16), 
+    axis.title = element_text(size = 14), 
+    axis.text = element_text(size = 12), 
+    axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),
+    strip.text = element_text(size = 12))
+ggsave("figures/terrestrial_invertebrates/Orders_comparison_WITH_BOG.png")
 
 ###########################################################################################################################################################################################################################################################################
 
