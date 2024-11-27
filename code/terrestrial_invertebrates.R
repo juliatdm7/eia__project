@@ -128,7 +128,52 @@ orders_plot <- ggplot(dat.it.redagg, aes(x = order, y = total_individuals, fill 
     axis.text = element_text(size = 12), 
     axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),
     strip.text = element_text(size = 12))
-ggsave("figures/Orders_comparison_WITHOUT_BOG.png")
+ggsave("figures/terrestrial_invertebrates/Orders_comparison_WITHOUT_BOG.png")
+
+# Graphic representation of indices
+
+# Including these in a data frame (WITHOUT BOG): might be wrong,
+alpha_div <- data.frame(
+  Site = rep(c("A", "B"), 6),
+  Index = rep(c("Shannon", "Simpson"), each = 6),
+  Height = rep(c("Bottom", "Bottom", "Middle", "Middle", "Top", "Top"), 2),
+  Value = c(shannon.alpha.dat.A, shannon.alpha.dat.B, simpson.alpha.dat.A, simpson.alpha.dat.B) # Replace with actual results
+)
+
+# preparing a data frame for Shannon index
+shannon <- alpha_div[which(alpha_div$Index=="Shannon"),]
+
+# Plotting the differences in Shannon index by site and height:
+shannon_plot <- ggplot(shannon, aes(x = Site, y = Value, fill = Site)) +
+  geom_bar(stat = "identity", position = "dodge", colour = "black", width = 0.5) +
+  labs(title = "Shannon Index Comparison", x = "Site", y = "Diversity Index") +
+  facet_wrap(~Height) +
+  scale_fill_manual(values = c("A" = "#0073e6", "B" = "#f194b8")) +
+  theme(
+    plot.title = element_text(hjust = 0.5, margin = margin(t = 5, b = 40), size = 16), 
+    axis.title = element_text(size = 14), 
+    axis.text = element_text(size = 12),
+    strip.text = element_text(size = 12))
+ggsave("figures/terrestrial_invertebrates/Shannon_indices_WITH_BOG.png")
+cvd_grid(shannon_plot) # checking that the chosen colour palette is suitable for colourblindness
+
+# preparing a data frame for Simpson index
+simpson <- alpha_div[which(alpha_div$Index=="Simpson"),]
+# Plotting the differences in Simpson index by site and height:
+simpson_plot <- ggplot(simpson, aes(x = Site, y = Value, fill = Site)) +
+  geom_bar(stat = "identity", position = "dodge", colour = "black", width = 0.5) +
+  labs(title = "Simpson Index Comparison", x = "Site", y = "Diversity Index") +
+  facet_wrap(~Height) +
+  scale_fill_manual(values = c("A" = "#0073e6", "B" = "#f194b8")) +
+  theme(
+    plot.title = element_text(hjust = 0.5, margin = margin(t = 5, b = 40), size = 16), 
+    axis.title = element_text(size = 14), 
+    axis.text = element_text(size = 12),
+    strip.text = element_text(size = 12))
+ggsave("figures/terrestrial_invertebrates/Simpson_indices_WITH_BOG.png")
+cvd_grid(simpson_plot) # checking that the chosen colour palette is suitable for colourblindness (although we're using the same colours and we've seen it's colourblindness safe)
+
+
 ##########################INCLUDING BOG TERRESTRIAL SAMPLING#############################################
 #Run this to check for bog instead of coding lines between 15 and 79
 
@@ -198,6 +243,48 @@ richness_ti <- data.frame(
 # Gamma Diversity for site A
 combined.dat.A.ab <- colSums(dat.A.ab) 
 gamma.richness.dat.A <- specnumber(combined.dat.A.ab)
+
+
+# Including these in a data frame (WITH BOG):
+alpha_div <- data.frame(
+  Site = rep(c("A", "A", "A", "B", "B", "B", "B"), 2),
+  Index = rep(c("Shannon", "Simpson"), each = 7),
+  Height = rep(c("Bottom", "Middle", "Top", "Bog", "Bottom", "Middle", "Top"), 2),
+  Value = c(shannon.alpha.dat.A, shannon.alpha.dat.B, simpson.alpha.dat.A, simpson.alpha.dat.B) # Replace with actual results
+)
+# preparing a data frame for Shannon index
+shannon <- alpha_div[which(alpha_div$Index=="Shannon"),]
+# Plotting the differences in Shannon index by site and height:
+shannon_plot <- ggplot(shannon, aes(x = Site, y = Value, fill = Site)) +
+  geom_bar(stat = "identity", position = "dodge", colour = "black", width = 0.5) +
+  labs(title = "Shannon Index Comparison", x = "Site", y = "Diversity Index") +
+  facet_wrap(~Height) +
+  scale_fill_manual(values = c("A" = "#0073e6", "B" = "#f194b8")) +
+  theme(
+    plot.title = element_text(hjust = 0.5, margin = margin(t = 5, b = 40), size = 16), 
+    axis.title = element_text(size = 14), 
+    axis.text = element_text(size = 12),
+    strip.text = element_text(size = 12))
+ggsave("figures/Shannon_indices_WITH_BOG.png")
+cvd_grid(shannon_plot) # checking that the chosen colour palette is suitable for colourblindness
+
+# preparing a data frame for Simpson index
+simpson <- alpha_div[which(alpha_div$Index=="Simpson"),]
+# Plotting the differences in Simpson index by site and height:
+simpson_plot <- ggplot(simpson, aes(x = Site, y = Value, fill = Site)) +
+  geom_bar(stat = "identity", position = "dodge", colour = "black", width = 0.5) +
+  labs(title = "Simpson Index Comparison", x = "Site", y = "Diversity Index") +
+  facet_wrap(~Height) +
+  scale_fill_manual(values = c("A" = "#0073e6", "B" = "#f194b8")) +
+  theme(
+    plot.title = element_text(hjust = 0.5, margin = margin(t = 5, b = 40), size = 16), 
+    axis.title = element_text(size = 14), 
+    axis.text = element_text(size = 12),
+    strip.text = element_text(size = 12))
+ggsave("figures/Simpson_indices_WITH_BOG.png")
+cvd_grid(simpson_plot) # checking that the chosen colour palette is suitable for colourblindness (although we're using the same colours and we've seen it's colourblindness safe)
+
+
 
 ###########################################################################################################################################################################################################################################################################
 
