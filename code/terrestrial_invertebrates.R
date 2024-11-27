@@ -281,7 +281,7 @@ simpson_plot <- ggplot(simpson, aes(x = Site, y = Value, fill = Site)) +
     axis.title = element_text(size = 14), 
     axis.text = element_text(size = 12),
     strip.text = element_text(size = 12))
-ggsave("figures/Simpson_indices_WITH_BOG.png")
+ggsave("figures/terrestrial_invertebrates/Simpson_indices_WITH_BOG.png")
 cvd_grid(simpson_plot) # checking that the chosen colour palette is suitable for colourblindness (although we're using the same colours and we've seen it's colourblindness safe)
 
 
