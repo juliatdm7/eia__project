@@ -39,3 +39,13 @@ bat.dat.ab <- as.data.frame(bat.dat.ab %>% replace_na(list0)) # here we replace 
 row.names(bat.dat.ab) <- bat.dat.ab$site # here we give to each row the name of its corresponding island
 bat.dat.ab <- bat.dat.ab[,-1]
 
+# Computing Shannon's and Simpson's diversity indices:
+shannon.alpha.bat.dat <- diversity(bat.dat.ab, index = "shannon")
+simpson.alpha.bat.dat <- diversity(bat.dat.ab, index = "simpson")
+#WARNING! By calculating Shannon's and Simpson's index we're assuming that each voice call accounts for an individual. Might me a wrong assumption.
+
+# To compute order richness is better to work with presence/absence data.
+# We transform our site-by-order matrix (data frame) into presence/absence:
+bat.dat.pa <- ifelse(bat.dat.ab > 0, 1, 0)
+richness_A <- rowSums(bat.dat.pa)[1] # Order richness in site A is 13
+richness_B <- rowSums(bat.dat.pa)[2] # Order richness in site B is 9
