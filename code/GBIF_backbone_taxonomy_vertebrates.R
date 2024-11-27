@@ -56,3 +56,6 @@ for (i in 1:n_spp) {
   }, silent = TRUE)  # Continue the loop even if an error occurs
   setTxtProgressBar(pb, i)  # Update the progress bar
 }
+length(which(spp.check.ok$status=="SYNONYM")) # No synonym species
+length(which(spp.check.ok$status=="DOUBTFUL")) # No doubtful species
+spp.check.ok.doubt <- spp.check.ok[which(spp.check.ok$status=="DOUBTFUL"),] ## Aegithalos caudatus (Linnaeus, 1758) is doubtful
