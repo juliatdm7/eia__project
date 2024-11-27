@@ -39,3 +39,27 @@ names(list0) <- names(bird.dat.pa)
 bird.dat.pa <- as.data.frame(bird.dat.pa %>% replace_na(list0))
 row.names(bird.dat.pa) <- bird.dat.pa$site
 bird.dat.pa <- bird.dat.pa[,-1]
+
+#Calculating species richness between sites
+
+richness_bird_A <- rowSums(bird.dat.pa)[1] 
+richness_bird_B <- rowSums(bird.dat.pa)[2]
+
+richness_bird <- data.frame(
+  Site = c("A", "B"),
+  Richness = c(richness_bird_B, richness_bird_A)
+)
+
+richness_bird_plot <- ggplot(richness_bird, aes(x = Site, y = Richness, fill = Site)) +
+  geom_bar(stat = "identity", position = "dodge", colour = "black", width = 0.5) +
+  geom_text(aes(label = Richness), vjust = -0.5, size = 5) +
+  labs(title = "Species richness", x = "Site", y = "Nr of Species") +
+  scale_fill_manual(values = c("A" = "#0073e6", "B" = "#f194b8")) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.2))) +
+  theme(
+    plot.title = element_text(hjust = 0.5, margin = margin(t = 5, b = 40), size = 16),  
+    axis.title = element_text(size = 14),  
+    axis.text = element_text(size = 12),  
+    strip.text = element_text(size = 12))
+ggsave("figures/vertebrates_birds/Birds_richness.png")
+cvd_grid(richness_bird_plot)
