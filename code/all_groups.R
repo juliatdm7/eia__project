@@ -59,6 +59,25 @@ for (i in 1:nrow(raw.data.all)) {
 }
 
 class_counts <- raw.data.all[,c("class","site","occurrenceStatus")]
-dat.B.redagg <- dat.B.red %>%
-  group_by(order, new_locationID) %>%
-  summarise(total_individuals = sum(individualCount), .groups = "drop")
+
+orderNA <- c(which(is.na(class_counts$class))) ##which species have NA’s
+class.data <- class_counts[-orderNA,]
+View(class.data)
+
+class.data[170,1] <- "Insecta"
+class.data[,3] <- 1
+
+class.data.aggreg <- class.data %>%
+  group_by(class, site) %>%
+  summarise(presence = 1, .groups = "drop")
+
+A <- class.data.aggreg[which(class.data.aggreg[,2]=="A"),]
+B <- class.data.aggreg[which(class.data.aggreg[,2]=="B"),]
+
+
+classes <- data.frame(
+  site = c("A", "B"),
+  nr_class = c(nrow(A),nrow(B))
+)
+
+
