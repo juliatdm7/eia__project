@@ -54,3 +54,4 @@ all_inverts <- ggplot(i.data.red.redagg, aes(x = order, y = total_individuals, f
     axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),
     strip.text = element_text(size = 12))
 ggsave("figures/all_invertebrates/Inverts_all.png")  
+
