@@ -23,6 +23,22 @@ i.data.red$individualCount <- as.numeric(i.data.red$individualCount)
 i.data.red.redagg <- i.data.red %>%
   group_by(order, site) %>%
   summarise(total_individuals = sum(individualCount), .groups = "drop")
+i.data.ab <- i.data.red.redagg %>%  
+  pivot_wider(names_from=order,values_from=c(total_individuals)) 
+list0 <- as.list(rep(0,ncol(i.data.ab))) 
+names(list0) <- names(i.data.ab) 
+i.data.ab <- as.data.frame(i.data.ab %>% replace_na(list0))
+row.names(i.data.ab) <- i.data.ab$site 
+i.data.ab <- i.data.ab[,-1]
+ncol(i.data.ab)
+
+# To compute order richness is better to work with presence/absence data.
+# We transform our site-by-order matrix (data frame) into presence/absence:
+i.data.pa <- ifelse(i.data.ab > 0, 1, 0)
+richness_A <- rowSums(i.data.pa)[1] # Order richness in site A is 13
+richness_B <- rowSums(i.data.pa)[2] # Order richness in site B is 9
+which((i.data.pa)[1,] != 0)
+which((i.data.pa)[2,] != 0)
 
 all_inverts <- ggplot(i.data.red.redagg, aes(x = order, y = total_individuals, fill = site)) +
   geom_bar(stat = "identity", position = "dodge", colour = "black") +
