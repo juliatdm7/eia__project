@@ -63,3 +63,5 @@ richness_bird_plot <- ggplot(richness_bird, aes(x = Site, y = Richness, fill = S
     strip.text = element_text(size = 12))
 ggsave("figures/vertebrates_birds/Birds_richness.png")
 cvd_grid(richness_bird_plot)
+
+# Maybe I should consider differentiating between top, middle, and bottom?
