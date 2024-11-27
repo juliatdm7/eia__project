@@ -62,3 +62,32 @@ metrics <- data.frame(
   Value = c(shannon.alpha.fi.dat[1], shannon.alpha.fi.dat[2], simpson.alpha.fi.dat[1], simpson.alpha.fi.dat[2], richness_A, richness_B)
 )
 
+# Plotting all three metrics
+metrics_plot <- ggplot(metrics, aes(x = Site, y = Value, fill = Site)) +
+  geom_bar(stat = "identity", position = "dodge", colour = "black") +
+  labs(title = "Metrics comparison", x = "Site", y = "Diversity Index") +
+  facet_wrap(~Metric) +
+  scale_fill_manual(values = c("A" = "#0073e6", "B" = "#f194b8")) +
+  theme(
+    plot.title = element_text(hjust = 0.5, margin = margin(t = 5, b = 40), size = 16),  
+    axis.title = element_text(size = 14),  
+    axis.text = element_text(size = 12),  
+    strip.text = element_text(size = 12))
+ggsave("figures/freshwater_invertebrates/All_metrics.png")
+cvd_grid(shannon_plot)
+
+# Maybe Richness plot is making it difficult to see differences in Shannon's and Simpson's indices.
+shannon_simpson <- metrics[metrics$Metric != "Richness", ]
+metrics_plot <- ggplot(shannon_simpson, aes(x = Site, y = Value, fill = Site)) +
+  geom_bar(stat = "identity", position = "dodge", colour = "black") +
+  labs(title = "Metrics comparison", x = "Site", y = "Diversity Index") +
+  facet_wrap(~Metric) +
+  scale_fill_manual(values = c("A" = "#0073e6", "B" = "#f194b8")) +
+  theme(
+    plot.title = element_text(hjust = 0.5, margin = margin(t = 5, b = 40), size = 16),  # Main title size
+    axis.title = element_text(size = 14),  # Axis titles size
+    axis.text = element_text(size = 12),  # Axis text size
+    strip.text = element_text(size = 12)   # Facet label size (if you have facets)
+  )
+ggsave("figures/freshwater_invertebrates/Shannon_Simpson_Only.png")
+cvd_grid(shannon_plot)
