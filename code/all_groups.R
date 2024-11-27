@@ -11,3 +11,41 @@ library(colorblindr)
 
 ################################################################################
 #All groups analysis#
+
+fi.raw.data <- read_excel("data/Arran_data1.xlsx", sheet = "N+S Stream inverts")
+A.ti.raw.data <- read_excel("data/Arran_data1.xlsx", sheet = "North side invert transects")
+B.ti.raw.data <- read_excel("data/Arran_data1.xlsx", sheet = "South side invert transects")
+ti.raw.data <- rbind(A.ti.raw.data,B.ti.raw.data)
+bog.raw.data <- read_excel("data/Arran_data1.xlsx", sheet = "BOG")
+vert1.raw.dat <- read_excel("data/Arran_data1.xlsx", sheet = "Vertebrates")
+vert2.raw.dat <- read_excel("data/Arran_data1.xlsx", sheet = "Vertebrates (tech)")
+moth.raw.data <- read_excel("data/Arran_data1.xlsx", sheet = "N+S Moth traps")
+
+str(fi.raw.data)
+str(ti.raw.data)
+str(bog.raw.data)
+str(moth.raw.data)
+str(vert1.raw.dat)
+str(vert2.raw.dat)
+
+
+fi.raw.data$eventDate <- as.character(fi.raw.data$eventDate)
+fi.raw.data$eventTime <- as.character(fi.raw.data$eventTime)
+
+ti.raw.data$eventDate <- as.character(ti.raw.data$eventDate)
+ti.raw.data$eventTime <- as.character(ti.raw.data$eventTime)
+
+bog.raw.data$eventDate <- as.character(bog.raw.data$eventDate)
+bog.raw.data$eventTime <- as.character(bog.raw.data$eventTime)
+
+moth.raw.data$eventDate <- as.character(moth.raw.data$eventDate)
+moth.raw.data$eventTime <- as.character(moth.raw.data$eventTime)
+
+vert1.raw.dat$eventDate <- as.character(vert1.raw.dat$eventDate)
+vert1.raw.dat$eventTime <- as.character(vert1.raw.dat$eventTime)
+
+vert2.raw.dat$eventDate <- as.character(vert2.raw.dat$eventDate)
+vert2.raw.dat$eventTime <- as.character(vert2.raw.dat$eventTime)
+
+raw.data.all <- rbind(fi.raw.data,ti.raw.data,bog.raw.data,moth.raw.data,vert1.raw.dat,vert2.raw.dat)
+
