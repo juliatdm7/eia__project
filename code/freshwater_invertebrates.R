@@ -45,6 +45,8 @@ fi.dat.ab <- as.data.frame(fi.dat.ab %>% replace_na(list0)) # here we replace al
 row.names(fi.dat.ab) <- fi.dat.ab$site # here we give to each row the name of its corresponding island
 fi.dat.ab <- fi.dat.ab[,-1] # we remove the island column because we don't need it anymore, as we have given island names to all rows
 
+ncol(fi.dat.ab) # Total number of orders sampled
+
 # Computing Shannon's and Simpson's diversity indices:
 shannon.alpha.fi.dat <- diversity(fi.dat.ab, index = "shannon")
 simpson.alpha.fi.dat <- diversity(fi.dat.ab, index = "simpson")
@@ -92,6 +94,23 @@ metrics_plot <- ggplot(shannon_simpson, aes(x = Site, y = Value, fill = Site)) +
 ggsave("figures/freshwater_invertebrates/Shannon_Simpson_Only.png")
 cvd_grid(shannon_plot)
 
+# Richness plot
+richness_fi <- metrics[metrics$Metric == "Richness", ]
+richness_plot_fi <- ggplot(richness_fi, aes(x = Site, y = Value, fill = Site)) +
+  geom_bar(stat = "identity", position = "dodge", colour = "black", width = 0.5) +
+  geom_text(aes(label = Value), position = position_dodge(width = 0.9), vjust = -0.5, size = 3) +
+  labs(title = "Freshwater invertebrates richness", x = "Site", y = "Order richness") +
+  scale_fill_manual(values = c("A" = "#0073e6", "B" = "#f194b8")) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.2))) + 
+  theme_bw() +
+  theme(
+    plot.title = element_text(hjust = 0.5, margin = margin(t = 5, b = 40), size = 16),  # Main title size
+    axis.title = element_text(size = 14),  # Axis titles size
+    axis.text = element_text(size = 12),  # Axis text size
+    strip.text = element_text(size = 12)   # Facet label size (if you have facets)
+  )
+ggsave("figures/freshwater_invertebrates/Freshwater_Invertebrates_richness.png")
+
 ################################################
 ###Freshwater Invertebrates Analysis With Bog###
 ################################################
@@ -111,8 +130,8 @@ for (i in 1:nrow(dat.fi)) {
 } # Modyfing data frame so "North" site is considered site A and "South" site is considered site B
 
 #We're gonna perform analysis for Order level, so we'll erase rows with NAs for rows:
-orderNA <- c(which(is.na(fi.raw.data$order))) ##which species have NA’s
-fi.data <- fi.raw.data[-orderNA,]
+orderNA <- c(which(is.na(dat.fi$order))) ##which species have NA’s
+fi.data <- dat.fi[-orderNA,]
 View(fi.data)
 
 # Creating one dataframe for each site
@@ -121,7 +140,7 @@ dat.B <- fi.data[which(fi.data$site=="B"),]
 
 
 fi.dat.red <- fi.data[,c("order","site","individualCount")]
-unique(fi.dat.red$order) # We can see that across both sites, 14 Orders were identified
+unique(fi.dat.red$order) # We can see that across both sites, 15 Orders were identified
 fi.dat.redagg <- fi.dat.red %>%
   group_by(order, site) %>%
   summarise(total_individuals = sum(individualCount), .groups = "drop") # We aggregate difference samples of the same Orders
@@ -140,8 +159,8 @@ simpson.alpha.fi.dat <- diversity(fi.dat.ab, index = "simpson")
 # To compute order richness is better to work with presence/absence data.
 # We transform our site-by-order matrix (data frame) into presence/absence:
 fi.dat.pa <- ifelse(fi.dat.ab > 0, 1, 0)
-richness_A <- rowSums(fi.dat.pa)[1] # Order richness in site A is 13
-richness_B <- rowSums(fi.dat.pa)[2] # Order richness in site B is 9
+richness_A <- rowSums(fi.dat.pa)[2] # Order richness in site A is 13
+richness_B <- rowSums(fi.dat.pa)[1] # Order richness in site B is 12 when we add the bog data!
 
 # Building a data frame including all three metrics:
 metrics <- data.frame(
@@ -156,6 +175,7 @@ metrics_plot <- ggplot(metrics, aes(x = Site, y = Value, fill = Site)) +
   labs(title = "Metrics comparison", x = "Site", y = "Diversity Index") +
   facet_wrap(~Metric) +
   scale_fill_manual(values = c("A" = "#0073e6", "B" = "#f194b8")) +
+  theme_bw() +
   theme(
     plot.title = element_text(hjust = 0.5, margin = margin(t = 5, b = 40), size = 16),  
     axis.title = element_text(size = 14),  
@@ -171,6 +191,7 @@ metrics_plot <- ggplot(shannon_simpson, aes(x = Site, y = Value, fill = Site)) +
   labs(title = "Metrics comparison", x = "Site", y = "Diversity Index") +
   facet_wrap(~Metric) +
   scale_fill_manual(values = c("A" = "#0073e6", "B" = "#f194b8")) +
+  theme_bw() + 
   theme(
     plot.title = element_text(hjust = 0.5, margin = margin(t = 5, b = 40), size = 16),  # Main title size
     axis.title = element_text(size = 14),  # Axis titles size
@@ -179,3 +200,35 @@ metrics_plot <- ggplot(shannon_simpson, aes(x = Site, y = Value, fill = Site)) +
   )
 ggsave("figures/freshwater_invertebrates/Shannon_Simpson_Only_WITH_BOG.png")
 cvd_grid(shannon_plot)
+
+# Richness plot
+richness_fi <- metrics[metrics$Metric == "Richness", ]
+richness_plot_fi <- ggplot(richness_fi, aes(x = Site, y = Value, fill = Site)) +
+  geom_bar(stat = "identity", position = "dodge", colour = "black", width = 0.5) +
+  geom_text(aes(label = Value), position = position_dodge(width = 0.9), vjust = -0.5, size = 3) +
+  labs(title = "Freshwater invertebrates richness", x = "Site", y = "Order richness") +
+  scale_fill_manual(values = c("A" = "#0073e6", "B" = "#f194b8")) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.2))) + 
+  theme_bw() +
+  theme(
+    plot.title = element_text(hjust = 0.5, margin = margin(t = 5, b = 40), size = 16),  # Main title size
+    axis.title = element_text(size = 14),  # Axis titles size
+    axis.text = element_text(size = 12),  # Axis text size
+    strip.text = element_text(size = 12)   # Facet label size (if you have facets)
+  )
+ggsave("figures/freshwater_invertebrates/Freshwater_Invertebrates_richness_WITH_BOG.png")
+
+fi_orders <- ggplot(fi.dat.redagg, aes(x = order, y = total_individuals, fill = site)) +
+  geom_bar(stat = "identity", position = "dodge", colour = "black") +
+  geom_text(aes(label = total_individuals), position = position_dodge(width = 0.9), vjust = -0.5, size = 3) +
+  labs(title = "Invertebrates diversity between sites", x = "Invertebrates orders", y = "Abundance") +
+  scale_fill_manual(values = c("A" = "#0073e6", "B" = "#f194b8")) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.2))) + 
+  theme_bw() +
+  theme(
+    plot.title = element_text(hjust = 0.5, margin = margin(t = 5, b = 40), size = 16),  # Main title size
+    axis.title = element_text(size = 14),  # Axis titles size
+    axis.text = element_text(size = 12),  
+    axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),
+    strip.text = element_text(size = 12))
+ggsave("figures/freshwater_invertebrates/Freshwater_Invertebrates_orders_WITH_BOG.png")  

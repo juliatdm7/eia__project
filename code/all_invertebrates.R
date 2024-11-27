@@ -45,7 +45,7 @@ all_inverts <- ggplot(i.data.red.redagg, aes(x = order, y = total_individuals, f
   geom_text(aes(label = total_individuals), position = position_dodge(width = 0.9), vjust = -0.5, size = 3) +
   labs(title = "Invertebrates diversity between sites", x = "Invertebrates orders", y = "Abundance") +
   scale_fill_manual(values = c("A" = "#0073e6", "B" = "#f194b8")) +
-  scale_y_continuous(expand = expansion(mult = c(0, 0.2))) + # Facet label size (if you have facets)
+  scale_y_continuous(expand = expansion(mult = c(0, 0.2))) + 
   theme_bw() +
   theme(
     plot.title = element_text(hjust = 0.5, margin = margin(t = 5, b = 40), size = 16),  # Main title size
