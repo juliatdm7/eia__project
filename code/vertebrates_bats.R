@@ -66,4 +66,15 @@ calls_bats <- ggplot(bat.dat.redagg, aes(x = vernacularName, y = total_calls, fi
   )
 ggsave("figures/vertebrates_bats/Nr_calls_bat.png") # Need to refer to Brown long-eared bat and Soprano pipistrelle being only in site A, cause colours are not quite distinguisable
 
+# Building a data frame including all three metrics:
+metrics <- data.frame(
+  Site = rep(c("A", "B"), 3),
+  Metric = rep(c("Shannon", "Simpson", "Richness"), each = 2),
+  Value = c(shannon.alpha.bat.dat[1], shannon.alpha.bat.dat[2], simpson.alpha.bat.dat[1], simpson.alpha.bat.dat[2], richness_A, richness_B)
+)
 
+# Building a data frame only for richness:
+richness_bats <- data.frame(
+  Site = c("A", "B"),
+  Richness = c(richness_A, richness_B)
+)
