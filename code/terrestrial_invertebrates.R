@@ -101,7 +101,34 @@ richness_ti <- data.frame(
 combined.dat.A.ab <- colSums(dat.A.ab) 
 gamma.richness.dat.A <- specnumber(combined.dat.A.ab)
 
+###########
+###Plots###
+###########
 
+dat.A.red <- dat.A[,c("order","site","individualCount")]
+dat.A.redagg <- dat.A.red %>%
+  group_by(order, site) %>%
+  summarise(total_individuals = sum(individualCount), .groups = "drop")
+dat.B.red <- dat.B[,c("order","site","individualCount")]
+dat.B.redagg <- dat.B.red %>%
+  group_by(order, site) %>%
+  summarise(total_individuals = sum(individualCount), .groups = "drop")
+
+dat.A.redagg$site <- "A"
+dat.B.redagg$site <- "B"
+dat.it.redagg <- rbind(dat.A.redagg, dat.B.redagg)
+
+orders_plot <- ggplot(dat.it.redagg, aes(x = order, y = total_individuals, fill = site)) +
+  geom_bar(stat = "identity", position = "dodge", colour = "black") +
+  labs(title = "Abundance of orders per site", x = "Orders", y = "Nr of specimens collected") +
+  scale_fill_manual(values = c("A" = "#0073e6", "B" = "#f194b8")) +
+  theme(
+    plot.title = element_text(hjust = 0.5, margin = margin(t = 5, b = 40), size = 16), 
+    axis.title = element_text(size = 14), 
+    axis.text = element_text(size = 12), 
+    axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),
+    strip.text = element_text(size = 12))
+ggsave("figures/Orders_comparison_WITHOUT_BOG.png")
 ##########################INCLUDING BOG TERRESTRIAL SAMPLING#############################################
 #Run this to check for bog instead of coding lines between 15 and 79
 
@@ -148,6 +175,30 @@ names(list0) <- names(dat.B.ab) # we assign the species names to this list of 0s
 dat.B.ab <- as.data.frame(dat.B.ab %>% replace_na(list0)) # here we replace all NAs with 0s for all species in dat.soc.pa
 row.names(dat.B.ab) <- dat.B.ab$new_locationID # here we give to each row the name of its corresponding island
 dat.B.ab <- dat.B.ab[,-1]
+
+# Computing Shannon's and Simpson's diversity indices:
+shannon.alpha.dat.A <- diversity(dat.A.ab, index = "shannon") # site A
+shannon.alpha.dat.B <- diversity(dat.B.ab, index = "shannon") # site B
+simpson.alpha.dat.A <- diversity(dat.A.ab, index = "simpson") # site A
+simpson.alpha.dat.B <- diversity(dat.B.ab, index = "simpson") # site B
+
+# Converting abundance data to presence/absence data in order to calculate richness and Soerensen and Jaccard indices:
+dat.A.pa <- ifelse(dat.A.ab > 0, 1, 0) # site A
+dat.B.pa <- ifelse(dat.B.ab > 0, 1, 0) # site B
+
+#Computing order richness
+richness_ti_A <- ncol(dat.A.pa) 
+richness_ti_B <- ncol(dat.B.pa)
+
+richness_ti <- data.frame(
+  Site = c("A", "B"),
+  Richness = c(richness_ti_A, richness_ti_B)
+)
+
+# Gamma Diversity for site A
+combined.dat.A.ab <- colSums(dat.A.ab) 
+gamma.richness.dat.A <- specnumber(combined.dat.A.ab)
+
 ###########################################################################################################################################################################################################################################################################
 
 
