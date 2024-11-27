@@ -70,6 +70,16 @@ class.data[,3] <- 1
 class.data.aggreg <- class.data %>%
   group_by(class, site) %>%
   summarise(presence = 1, .groups = "drop")
+class.dat.pa <- class.data.aggreg %>%  
+  pivot_wider(names_from=class,values_from=c(presence)) 
+list0 <- as.list(rep(0,ncol(class.dat.pa))) 
+names(list0) <- names(class.dat.pa) 
+class.dat.pa <- as.data.frame(class.dat.pa %>% replace_na(list0))
+row.names(class.dat.pa) <- class.dat.pa$site 
+class.dat.pa <- class.dat.pa[,-1]
+
+classes_richness_A <- rowSums(class.dat.pa)[2]
+classes_richness_B <- rowSums(class.dat.pa)[1]
 
 A <- class.data.aggreg[which(class.data.aggreg[,2]=="A"),]
 B <- class.data.aggreg[which(class.data.aggreg[,2]=="B"),]
