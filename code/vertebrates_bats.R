@@ -78,3 +78,18 @@ richness_bats <- data.frame(
   Site = c("A", "B"),
   Richness = c(richness_A, richness_B)
 )
+
+# Plotting richness
+richness_plot <- ggplot(richness_bats, aes(x = Site, y = Richness, fill = Site)) +
+  geom_bar(stat = "identity", position = "dodge", colour = "black", width = 0.5) +
+  geom_text(aes(label = Richness), vjust = -0.5, size = 5) +
+  labs(title = "Richness comparison", x = "Site", y = "Nr of species/genus") +
+  scale_fill_manual(values = c("A" = "#0073e6", "B" = "#f194b8")) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.2))) +
+  theme(
+    plot.title = element_text(hjust = 0.5, margin = margin(t = 5, b = 40), size = 16),  
+    axis.title = element_text(size = 14),  
+    axis.text = element_text(size = 12),  
+    strip.text = element_text(size = 12))
+ggsave("figures/Richnesss_bat.png")
+cvd_grid(shannon_plot)
