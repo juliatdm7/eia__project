@@ -76,8 +76,20 @@ B <- class.data.aggreg[which(class.data.aggreg[,2]=="B"),]
 
 
 classes <- data.frame(
-  site = c("A", "B"),
-  nr_class = c(nrow(A),nrow(B))
+  Site = c("A", "B"),
+  Classes = c(nrow(A),nrow(B))
 )
 
-
+all.dat.class <- ggplot(classes, aes(x = Site, y = Classes, fill = Site)) +
+  geom_bar(stat = "identity", position = "dodge", colour = "black", width = 0.5) +
+  geom_text(aes(label = Classes), vjust = -0.5, size = 5) +
+  labs(title = "Number of classes between sites", x = "Site", y = "Nr of classes") +
+  scale_fill_manual(values = c("A" = "#0073e6", "B" = "#f194b8")) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.2))) +
+  theme(
+    plot.title = element_text(hjust = 0.5, margin = margin(t = 5, b = 40), size = 16),  
+    axis.title = element_text(size = 14),  
+    axis.text = element_text(size = 12),  
+    strip.text = element_text(size = 12))
+ggsave("figures/all_groups/Classes_all.png")
+cvd_grid(richness_bird_plot) # Making sure colours are colourblind friendly
