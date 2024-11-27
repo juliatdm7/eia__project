@@ -91,5 +91,23 @@ richness_plot <- ggplot(richness_bats, aes(x = Site, y = Richness, fill = Site))
     axis.title = element_text(size = 14),  
     axis.text = element_text(size = 12),  
     strip.text = element_text(size = 12))
-ggsave("figures/Richnesss_bat.png")
+ggsave("figures/vertebrates_bats/Richnesss_bat.png")
+cvd_grid(shannon_plot)
+
+# Building a data frame only for indices:
+shannon_simpson <- metrics[metrics$Metric != "Richness", ]
+
+# Plotting Shannon's and Simpson's indices
+shannon_simpson_plot <- ggplot(shannon_simpson, aes(x = Site, y = Value, fill = Site)) +
+  geom_bar(stat = "identity", position = "dodge", colour = "black") +
+  labs(title = "Diversity indices comparison", x = "Site", y = "Diversity Index") +
+  facet_wrap(~Metric) +
+  scale_fill_manual(values = c("A" = "#0073e6", "B" = "#f194b8")) +
+  theme(
+    plot.title = element_text(hjust = 0.5, margin = margin(t = 5, b = 40), size = 16),  # Main title size
+    axis.title = element_text(size = 14),  # Axis titles size
+    axis.text = element_text(size = 12),  # Axis text size
+    strip.text = element_text(size = 12)   # Facet label size (if you have facets)
+  )
+ggsave("figures/vertebrates_bats/Shannon_simpson_bat.png")
 cvd_grid(shannon_plot)
