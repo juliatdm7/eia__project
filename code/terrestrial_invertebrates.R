@@ -78,3 +78,14 @@ dat.B.ab <- as.data.frame(dat.B.ab %>% replace_na(list0)) # here we replace all 
 row.names(dat.B.ab) <- dat.B.ab$new_locationID # here we give to each row the name of its corresponding island
 dat.B.ab <- dat.B.ab[,-1]
 
+# Computing Shannon's and Simpson's diversity indices:
+shannon.alpha.dat.A <- diversity(dat.A.ab, index = "shannon") # site A
+shannon.alpha.dat.B <- diversity(dat.B.ab, index = "shannon") # site B
+simpson.alpha.dat.A <- diversity(dat.A.ab, index = "simpson") # site A
+simpson.alpha.dat.B <- diversity(dat.B.ab, index = "simpson") # site B
+
+# Gamma Diversity for site A
+combined.dat.A.ab <- colSums(dat.A.ab) 
+gamma.richness.dat.A <- specnumber(combined.dat.A.ab)
+
+
