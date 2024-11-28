@@ -39,11 +39,12 @@ names(list0) <- names(bird.dat.pa)
 bird.dat.pa <- as.data.frame(bird.dat.pa %>% replace_na(list0))
 row.names(bird.dat.pa) <- bird.dat.pa$site
 bird.dat.pa <- bird.dat.pa[,-1]
+ncol(bird.dat.pa) # The total number of species identified across sites is 21
 
 #Calculating species richness between sites
 
-richness_bird_A <- rowSums(bird.dat.pa)[1] 
-richness_bird_B <- rowSums(bird.dat.pa)[2]
+richness_bird_A <- rowSums(bird.dat.pa)[1] # 12 out of 21 species found in site A
+richness_bird_B <- rowSums(bird.dat.pa)[2] # 19 out of 21 species found in site B
 
 richness_bird <- data.frame(
   Site = c("A", "B"),
