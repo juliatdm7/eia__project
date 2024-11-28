@@ -68,11 +68,3 @@ cvd_grid(richness_bird_plot)
 
 # Maybe I should consider differentiating between top, middle, and bottom?
 
-#Option  1 of sections
-bird.dat$new_locationID <- "0"
-bird.dat[1:8,32] <- "Bog"
-bird.dat[9:15,32] <- "Middle"
-bird.dat[16:19,32] <- "Top"
-bird.dat[20:31,32] <- "Bottom"
-bird.dat[32:38,32] <- "Middle"
-bird.dat[c(39,40),32] <- "Top"
