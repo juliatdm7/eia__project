@@ -4,7 +4,7 @@
 
 library(readxl)
 library(rgbif)
-bird.vert.north.south <- read_excel("data/EIA_data.xlsx", sheet = "Birds")
+bird.vert.north.south <- read_excel("data/Arran_data1.xlsx", sheet = "Vertebrates")
 View(bird.vert.north.south)
 
 table <- data.frame(scientificName=as.character(unique(bird.vert.north.south$scientificName)))
