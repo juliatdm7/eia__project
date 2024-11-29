@@ -11,6 +11,7 @@ library(colorblindr)
 
 ################################################################################
 #All groups analysis#
+#Run this file between running all_invertebrates.R
 
 fi.raw.data <- read_excel("data/Arran_data1.xlsx", sheet = "N+S Stream inverts")
 A.ti.raw.data <- read_excel("data/Arran_data1.xlsx", sheet = "North side invert transects")
@@ -62,7 +63,6 @@ class_counts <- raw.data.all[,c("class","site","occurrenceStatus")]
 
 orderNA <- c(which(is.na(class_counts$class))) ##which species have NA’s
 class.data <- class_counts[-orderNA,]
-View(class.data)
 
 class.data[170,1] <- "Insecta"
 class.data[,3] <- 1
@@ -102,4 +102,4 @@ all.dat.class <- ggplot(classes, aes(x = Site, y = Classes, fill = Site)) +
     axis.text = element_text(size = 12),  
     strip.text = element_text(size = 12))
 ggsave("figures/all_groups/Classes_all.png")
-cvd_grid(richness_bird_plot) # Making sure colours are colourblind friendly
+cvd_grid(all.dat.class) # Making sure colours are colourblind friendly
