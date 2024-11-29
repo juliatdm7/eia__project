@@ -52,16 +52,17 @@ richness_B <- rowSums(bat.dat.pa)[2] # Order richness in site B is 9
 
 # Plotting number of calls per bat taxon per site
 calls_bats <- ggplot(bat.dat.redagg, aes(x = vernacularName, y = total_calls, fill = site)) +
-  geom_bar(stat = "identity", position = "dodge", colour = "black") +
-  geom_text(aes(label = total_calls), position = position_dodge(width = 0.9), vjust = -0.5, size = 5) +
+  geom_bar(stat = "identity", position = "dodge", colour = "black", width = 0.5) +
+  geom_text(aes(label = total_calls), position = position_dodge(width = 0.8), vjust = -0.5, size = 5) +
   labs(title = "Bat calls", x = "Bat taxon", y = "Number of calls") +
   scale_fill_manual(values = c("A" = "#0073e6", "B" = "#f194b8")) +
   scale_y_continuous(expand = expansion(mult = c(0, 0.2))) +
+  theme_bw() +
   theme(
     plot.title = element_text(hjust = 0.5, margin = margin(t = 5, b = 40), size = 16),  # Main title size
     axis.title = element_text(size = 14),  # Axis titles size
     axis.text = element_text(size = 12),  
-    axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),
+    axis.text.x = element_text(hjust = 0.5, vjust = 1),
     strip.text = element_text(size = 12)   # Facet label size (if you have facets)
   )
 ggsave("figures/vertebrates_bats/Nr_calls_bat.png") # Need to refer to Brown long-eared bat and Soprano pipistrelle being only in site A, cause colours are not quite distinguisable
@@ -111,3 +112,22 @@ shannon_simpson_plot <- ggplot(shannon_simpson, aes(x = Site, y = Value, fill = 
   )
 ggsave("figures/vertebrates_bats/Shannon_simpson_bat.png")
 cvd_grid(shannon_plot)
+
+# Removing Common Pipistrelle calls to better compare number of calls across sites:
+library(ggplot2)
+bat.dat.redagg2 <- bat.dat.redagg[which(bat.dat.redagg$vernacularName!="Common pipistrelle"),]
+calls_bats <- ggplot(bat.dat.redagg2, aes(x = vernacularName, y = total_calls, fill = site)) +
+  geom_bar(stat = "identity", position = "dodge", colour = "black", width = 0.5) +
+  geom_text(aes(label = total_calls), position = position_dodge(width = 0.5), vjust = -0.5, size = 5) +
+  labs(title = "Bat calls", x = "Bat taxon", y = "Number of calls") +
+  scale_fill_manual(values = c("A" = "#0073e6", "B" = "#f194b8")) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.2))) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(hjust = 0.5, margin = margin(t = 5, b = 20), size = 16),  # Main title size
+    axis.title = element_text(size = 14),  # Axis titles size
+    axis.text = element_text(size = 12),  
+    axis.text.x = element_text(hjust = 0.5, vjust = 1),
+    strip.text = element_text(size = 12)   # Facet label size (if you have facets)
+  )
+ggsave("figures/vertebrates_bats/Nr_calls_bat_NoCommonPipistrelle.png")
