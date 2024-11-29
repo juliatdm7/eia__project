@@ -11,15 +11,16 @@ library(colorblindr)
 
 ################################################################################
 #All invertebrates analysis#
+#Please run the file all_groups.R before running this one#
+all.inverts <- raw.data.all[1:235,] # Loading all invertebrate data
 
-all.inverts <- raw.data.all[1:235,]
-
-orderNA <- c(which(is.na(all.inverts$order))) ##which species have NA’s
+orderNA <- c(which(is.na(all.inverts$order))) ##which rows have NA’s
 i.data <- all.inverts[-orderNA,]
-View(i.data)
 
 i.data.red <- i.data[,c("order","site","individualCount")]
 i.data.red$individualCount <- as.numeric(i.data.red$individualCount)
+
+# Rearranging data to create site by class dataframes
 i.data.red.redagg <- i.data.red %>%
   group_by(order, site) %>%
   summarise(total_individuals = sum(individualCount), .groups = "drop")
@@ -40,6 +41,7 @@ richness_B <- rowSums(i.data.pa)[2] # Order richness in site B is 9
 which((i.data.pa)[1,] != 0)
 which((i.data.pa)[2,] != 0)
 
+#Bar plot for orders comparison between sites
 all_inverts <- ggplot(i.data.red.redagg, aes(x = order, y = total_individuals, fill = site)) +
   geom_bar(stat = "identity", position = "dodge", colour = "black") +
   geom_text(aes(label = total_individuals), position = position_dodge(width = 0.9), vjust = -0.5, size = 3) +
