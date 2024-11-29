@@ -8,6 +8,7 @@ library(vegan)
 library(betapart)
 library(dplyr)
 library(colorblindr)
+library(ggplot2)
 
 ################################################################################
 #All groups analysis#

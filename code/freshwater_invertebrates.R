@@ -8,6 +8,7 @@ library(vegan)
 library(betapart)
 library(dplyr)
 library(colorblindr)
+library(ggplot2)
 
 ################################################################################
 #Freshwater invertebrates analysis#
