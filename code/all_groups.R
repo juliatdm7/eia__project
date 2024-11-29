@@ -23,6 +23,7 @@ vert1.raw.dat <- read_excel("data/Arran_data1.xlsx", sheet = "Vertebrates")
 vert2.raw.dat <- read_excel("data/Arran_data1.xlsx", sheet = "Vertebrates (tech)")
 moth.raw.data <- read_excel("data/Arran_data1.xlsx", sheet = "N+S Moth traps")
 
+#Making sure all rowa from the same column share the same string type
 str(fi.raw.data)
 str(ti.raw.data)
 str(bog.raw.data)
@@ -30,7 +31,7 @@ str(moth.raw.data)
 str(vert1.raw.dat)
 str(vert2.raw.dat)
 
-
+#Changing problematic string type
 fi.raw.data$eventDate <- as.character(fi.raw.data$eventDate)
 fi.raw.data$eventTime <- as.character(fi.raw.data$eventTime)
 
@@ -49,8 +50,10 @@ vert1.raw.dat$eventTime <- as.character(vert1.raw.dat$eventTime)
 vert2.raw.dat$eventDate <- as.character(vert2.raw.dat$eventDate)
 vert2.raw.dat$eventTime <- as.character(vert2.raw.dat$eventTime)
 
+#Combining all subset into a dataset
 raw.data.all <- rbind(fi.raw.data,ti.raw.data,bog.raw.data,moth.raw.data,vert1.raw.dat,vert2.raw.dat)
 
+#Changing site column so that it corresponds to nomenclature used in the EcIA report document
 for (i in 1:nrow(raw.data.all)) {
   if (raw.data.all[i, "site"] == "North") {
     raw.data.all[i, "site"] <- "A"
@@ -59,14 +62,17 @@ for (i in 1:nrow(raw.data.all)) {
   }
 }
 
+#Subseting data to classes
 class_counts <- raw.data.all[,c("class","site","occurrenceStatus")]
 
-orderNA <- c(which(is.na(class_counts$class))) ##which species have NA’s
-class.data <- class_counts[-orderNA,]
+orderNA <- c(which(is.na(class_counts$class))) ##which rows have NA’s
+class.data <- class_counts[-orderNA,] # removing rows with Nas for order column
 
+#Fixing problematic data
 class.data[170,1] <- "Insecta"
 class.data[,3] <- 1
 
+#Changing data format to create site by class dataframes
 class.data.aggreg <- class.data %>%
   group_by(class, site) %>%
   summarise(presence = 1, .groups = "drop")
