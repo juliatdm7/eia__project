@@ -8,6 +8,7 @@ library(vegan)
 library(betapart)
 library(dplyr)
 library(colorblindr)
+library(ggplot2)
 
 ################################################################################
 #Bats analysis#
@@ -30,13 +31,13 @@ bat.dat.red <- bat.dat[,c("vernacularName","site","individualCount")]
 unique(bat.dat.red$vernacularName) # Five bats species (or genus) are shared among sites
 bat.dat.redagg <- bat.dat.red %>%
   group_by(vernacularName, site) %>%
-  summarise(total_calls = sum(individualCount), .groups = "drop") # We aggregate difference samples of the same Orders
-bat.dat.ab <- bat.dat.redagg %>%  #  here we're passing the dat.soc.red data frame into the next function using the operator pipe (%>%)
-  pivot_wider(names_from=vernacularName,values_from=c(total_calls)) # the pivot_wider() function of tidyverse converts data from a long format to a wide format, creating a new dataframe in the values under "species" become columns, the "islands" become rows and the cells are filled with the corresponding "presence" values 
-list0 <- as.list(rep(0,ncol(bat.dat.ab))) # here we create a list with as many 0s as there are columns in dat.soc.pa
-names(list0) <- names(bat.dat.ab) # we assign the species names to this list of 0s
-bat.dat.ab <- as.data.frame(bat.dat.ab %>% replace_na(list0)) # here we replace all NAs with 0s for all species in dat.soc.pa
-row.names(bat.dat.ab) <- bat.dat.ab$site # here we give to each row the name of its corresponding island
+  summarise(total_calls = sum(individualCount), .groups = "drop") 
+bat.dat.ab <- bat.dat.redagg %>%  
+  pivot_wider(names_from=vernacularName,values_from=c(total_calls)) 
+list0 <- as.list(rep(0,ncol(bat.dat.ab)))
+names(list0) <- names(bat.dat.ab) 
+bat.dat.ab <- as.data.frame(bat.dat.ab %>% replace_na(list0)) 
+row.names(bat.dat.ab) <- bat.dat.ab$site 
 bat.dat.ab <- bat.dat.ab[,-1]
 
 # Computing Shannon's and Simpson's diversity indices:
@@ -114,7 +115,6 @@ ggsave("figures/vertebrates_bats/Shannon_simpson_bat.png")
 cvd_grid(shannon_plot)
 
 # Removing Common Pipistrelle calls to better compare number of calls across sites:
-library(ggplot2)
 bat.dat.redagg2 <- bat.dat.redagg[which(bat.dat.redagg$vernacularName!="Common pipistrelle"),]
 calls_bats <- ggplot(bat.dat.redagg2, aes(x = vernacularName, y = total_calls, fill = site)) +
   geom_bar(stat = "identity", position = "dodge", colour = "black", width = 0.5) +
